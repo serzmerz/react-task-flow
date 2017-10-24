@@ -1,0 +1,19 @@
+.field {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle {
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    padding-top: 70px;
+    margin-bottom: 30px;
+}
+
+.input {
+    margin-bottom: 30px;
+}
