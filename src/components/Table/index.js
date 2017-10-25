@@ -1,55 +1,41 @@
 import React from 'react';
-import {RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui";
-import styles from './index.css';
+import {RaisedButton, TableRow, TableRowColumn} from "material-ui";
 
-const TableComponent = () => {
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as actionCreators from '../../actions/tasks';
+import TableOfList from "./TableOfList";
+import {Link} from "react-router-dom";
+import {convertDateToTime, convertTime} from "../../utils/index";
 
-   return( <Table className={styles.table}>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-            <TableRow>
-                <TableHeaderColumn>№</TableHeaderColumn>
-                <TableHeaderColumn>Name of task</TableHeaderColumn>
-                <TableHeaderColumn>Time start</TableHeaderColumn>
-                <TableHeaderColumn>Time end</TableHeaderColumn>
-                <TableHeaderColumn>Time spent</TableHeaderColumn>
-                <TableHeaderColumn/>
-                <TableHeaderColumn/>
-            </TableRow>
-        </TableHeader>
-           <TableBody displayRowCheckbox={false}
-           >
-            <TableRow>
-                <TableRowColumn>1</TableRowColumn>
-                <TableRowColumn>John Smith</TableRowColumn>
-                <TableRowColumn>1:23</TableRowColumn>
-                <TableRowColumn>1:54</TableRowColumn>
-                <TableRowColumn>0:23</TableRowColumn>
-                <TableRowColumn><RaisedButton label="info" /></TableRowColumn>
-                <TableRowColumn><RaisedButton label="delete" /></TableRowColumn>
-            </TableRow>
-            <TableRow>
-                <TableRowColumn>2</TableRowColumn>
-                <TableRowColumn>Randal White</TableRowColumn>
-                <TableRowColumn>Unemployed</TableRowColumn>
-            </TableRow>
-            <TableRow>
-                <TableRowColumn>3</TableRowColumn>
-                <TableRowColumn>Stephanie Sanders</TableRowColumn>
-                <TableRowColumn>Employed</TableRowColumn>
-            </TableRow>
-            <TableRow>
-                <TableRowColumn>4</TableRowColumn>
-                <TableRowColumn>Steve Brown</TableRowColumn>
-                <TableRowColumn>Employed</TableRowColumn>
-            </TableRow>
-            <TableRow>
-                <TableRowColumn>5</TableRowColumn>
-                <TableRowColumn>Christopher Nolan</TableRowColumn>
-                <TableRowColumn>Unemployed</TableRowColumn>
-            </TableRow>
-        </TableBody>
-    </Table>
-   );
+class TableComponent extends React.Component {
+
+    deleteTask = (id) => () => {
+        this.props.actions.deleteTask(id)
+    };
+
+    makeItems = () => this.props.items.map((item) => (<TableRow key={item.id}>
+            <TableRowColumn>{item.id}</TableRowColumn>
+            <TableRowColumn>{item.name}</TableRowColumn>
+            <TableRowColumn>{convertDateToTime(item.dateEnd - (item.time*1000))}</TableRowColumn>
+            <TableRowColumn>{convertDateToTime(item.dateEnd)}</TableRowColumn>
+            <TableRowColumn>{convertTime(item.time)}</TableRowColumn>
+        <TableRowColumn><Link to={`info/${item.id}`}><RaisedButton label="info"/></Link></TableRowColumn>
+            <TableRowColumn><RaisedButton label="delete" onClick={this.deleteTask(item.id)}/></TableRowColumn>
+        </TableRow>));
+
+    render() {
+        return (<TableOfList items={this.makeItems()}/>);
+    }
+}
+
+const mapStateToProps = (state) => {
+    return {
+        items: state.tasks.items
+    };
 };
 
-export default TableComponent;
+const mapDispatchToProps = (dispatch) => ({
+    actions: bindActionCreators(actionCreators, dispatch)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(TableComponent);

@@ -1,0 +1,17 @@
+.circle {
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    padding-top: 70px;
+    margin: 0 auto 30px;
+}
+.input {
+    margin-bottom: 30px;
+}
+.wrapInputs {
+    text-align: center;
+}
+.wrapTimer {
+    margin-top: 15px;
+    font-size: 25px;
+}

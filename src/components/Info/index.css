@@ -1,0 +1,15 @@
+.wrapItems {
+    margin-top: 50px;
+    padding: 20px;
+    width: 500px;
+}
+.item span {
+    padding: 10px;
+    display: inline-block;
+}
+.right {
+    float: right;
+}
+.divider {
+    width: 100%;
+}
